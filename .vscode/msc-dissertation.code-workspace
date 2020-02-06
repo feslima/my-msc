@@ -85,6 +85,7 @@
 					"auxiliary/%DOCFILE%.nls"
 				]
 			}
-		]
+		],
+		"cSpell.enabled": true
 	}
 }
