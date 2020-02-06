@@ -35,6 +35,9 @@
         "yml"
     ],
     "cSpell.words": [
-        "metamodels"
-    ]
+        "metamodels",
+        "plantwide",
+        "reoptimize"
+    ],
+    "cSpell.language": "en,pt,pt_BR"
 }
