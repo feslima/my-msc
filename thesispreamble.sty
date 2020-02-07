@@ -15,6 +15,7 @@
 \usepackage{etoolbox}
 \usepackage{amsmath}
 \usepackage{xspace}
+\usepackage{ifthen}
 
 % ------------------------------------------------------------------------------
 		
@@ -48,23 +49,28 @@
 % lista de símbolos e lista de siglas
 \makenomenclature
 
-\newif\iffirstglossary\firstglossarytrue
-\renewcommand\nomgroup[1]{%
-\iffirstglossary
-    \firstglossaryfalse
-\else
-    \cleardoublepage
-\fi
-\item[]%
-{\hfil\ABNTEXchapterfont\ABNTEXchapterfontsize %
-\ifstrequal{#1}{A}{%
-    \listadesiglasname%
-}{%
-    \ifstrequal{#1}{S}{\listadesimbolosname}{}%
-}%
-\hfil} %
-%] %
-\thispagestyle{empty}}
+\renewcommand{\nomgroup}[1]
+ {
+	 \ifstrequal{#1}{A}{\item[] {\hfil\ABNTEXchapterfont\ABNTEXchapterfontsize 
+	 \listadesiglasname}\hfill}
+     {
+     	\ifstrequal{#1}{B}
+     	{
+     		\cleardoublepage
+			 \item[] {\hfil\ABNTEXchapterfont\ABNTEXchapterfontsize 
+			 \listadesimbolosname\hfill}
+     	}{}
+     
+	     \item [
+	     \textbf{Chapter \ifstrequal{#1}{B}{2}{
+	     		\ifstrequal{#1}{C}{3}{
+	     			\ifstrequal{#1}{D}{4}{
+	     				\ifstrequal{#1}{E}{6}{}
+	     			}}}}
+     		]
+	 }
+	 \thispagestyle{empty}
+ }
 
 \renewcommand{\nomname}{}
 
