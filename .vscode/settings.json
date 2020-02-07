@@ -35,9 +35,15 @@
         "yml"
     ],
     "cSpell.words": [
+        "Linearizing",
+        "linearization",
         "metamodels",
+        "nullspace",
         "plantwide",
-        "reoptimize"
+        "reoptimize",
+        "reoptimizing",
+        "setpoint",
+        "setpoints"
     ],
     "cSpell.language": "en,pt,pt_BR"
 }
