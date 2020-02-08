@@ -1,0 +1,167 @@
+% !TeX root = ../msc-thesis.tex
+\documentclass[../msc-thesis.tex]{subfiles}
+
+\begin{document}
+
+\chapter{\kriging reasoning}
+
+Metamodels are a way to represent the world in simpler terms. Think of them as 
+a photograph, they do not capture the moment as whole but can represent it 
+good enough. In this analogy, the moment is a complex process that it is too 
+cumbersome to explain it completely in mathematical terms, and metamodels, as 
+photographs, may serve the purpose of capturing the core trends of this 
+process without being too unwieldy and not losing too much information.
+
+There is a family of metamodeling methodologies, ranging from a simple linear 
+regression to complex neural networks. However, this chapter will be dedicated 
+to discuss \kriging surrogates.
+
+The simplest form to represent a real world process ($y$) through a metamodel 
+($\hat{y}$) and its error ($\varepsilon$) is done through \autoref{eq:surreq}.
+
+\begin{equation}
+    y(x) = \hat{y}(x) + \varepsilon
+    \label{eq:surreq}
+\end{equation}
+\nomenclature[C]{$y$}{Function that calculates the output of a process}
+\nomenclature[C]{$x$}{Input of a process, or sample}
+\nomenclature[C]{$\hat{y}$}{Metamodel (approximation) of $y$}
+\nomenclature[C]{$\varepsilon$}{Residuals or random noise}
+
+The error $\varepsilon$ is associated with the unmodeled effects of the inputs 
+$x$ and random noise (i.e. it cannot be explained in detail but cannot be 
+ignored as well.). When using the \kriging methodology as metamodel, this 
+error is assumed to be a probabilistic function of $x$, or in other words, 
+this error is assumed to be \textit{not} independent and identically 
+distributed. The specific probabilistic function is represented by a Gaussian 
+distribution with mean zero and variance $\sigma^2$.
+
+\begin{equation}
+    \varepsilon = \varepsilon(x) \sim \mathcal{N}(0, \sigma^2)
+    \label{eq:krgdist}
+\end{equation}
+
+% \begin{figure}
+%     \centering
+%     \def\svgwidth{\columnwidth}
+%     \input{../images/correlation_explain.pdf_tex}
+% \end{figure}
+
+As from \textcite{Lophaven2002}, a \kriging metamodel is comprised of two 
+parts: a polynomial regression $\mathcal{F}$ and departure function $z$ of 
+stochastic nature, as can be seen in \autoref{eq:kr1}.
+
+\begin{equation}
+    \hat{y}_{l}(x)=\mathcal{F}\left(\beta_{:, l}, x\right)+z_{l}(x), 
+    \quad l=1, \ldots, q
+    \label{eq:kr1}
+\end{equation}
+\nomenclature[C]{$\mathcal{F}, f(x)$}{Polynomial regression function}
+\nomenclature[C]{$z$}{Stochastic departure function}
+
+The regression model, considered as a linear combination of $t$ functions 
+($f_{j}: \mathbb{R}^{n} \rightarrow \mathbb{R}$), as defined in 
+\autoref{eq:kr2}.
+
+\begin{equation}
+	\mathcal{F}\left(\beta_{:, l}, x\right) \equiv f(x)^{T} \beta_{:, l}
+	\label{eq:kr2}
+\end{equation}
+
+The most common choices for $f(x)$ are polynomials with orders ranging from 
+zero (constant) to two (quadratic). It is assumed that $z$ has mean zero, and 
+the covariance between to given points, arbitrarily named $w$ and $x$ for 
+instance, is defined by \autoref{eq:kr3}:
+
+\begin{equation}
+    \operatorname{Cov}\left[z_{l}(w), z_{l}(x)\right]=\sigma_{l}^{2} 
+    \mathcal{R}\left(\theta_{l}, w, x\right), \quad l=1, \ldots, q
+	\label{eq:kr3}
+\end{equation}
+
+With $\sigma_{l}^{2}$ being the process variance for the \textit{lth} response 
+component, and $\mathcal{R}(\theta, w, x)$ defined as the correlation model. 
+In \mtc, the correlation model used is described in \autoref{eq:kr4}.
+
+\begin{equation}
+    \mathcal{R}\left(\theta_{l}, w, x\right)=\exp \left(-\sum_{i=1}^{m} 
+    \theta_{l}\left(w-x_{i}\right)^{p}\right), \quad\left(\theta_{l} \geq 0, 
+    p_{l} \in[0,2]\right)
+	\label{eq:kr4}
+\end{equation}
+\nomenclature[C]{$\sigma_{l}^{2}$}{Process variance}
+\nomenclature[C]{$\theta$}{\kriging hyperparameter of variable activity}
+\nomenclature[C]{$p$}{\kriging hyperparameter of correlation smoothness}
+
+Two important concepts must be addressed at this point: The first regards the 
+meaning of the hyperparameter $\theta$, being interpreted as the ``activity'' 
+of variable $x$, meaning that, a low value of $\theta$ indicates that the 
+points are highly correlated \cite{Alves2018}. In addition, the value of 
+$\theta$ also indicates how fast the correlation goes to zero as the 
+process moves in the \textit{lth} direction, as discussed by 
+\textcite{Caballero2008}. The second concept regards the parameter $p$ in 
+\autoref{eq:kr4}, that represents the ``smoothness'' of the correlation. As 
+its value reduces, the rate of the initial correlation drops as the distance 
+between $w$ and $x_i$ increases. When $p \approx 0$, there is a 
+discontinuity between $Y(w)$ and $Y\left(x_{i}\right)$ \cite{Forrester2008} 
+and there is no immediate correlation between the given points.
+
+The hyperparameters $\theta$ are degrees of freedom available for optimization 
+purposes, seeking the improvement of the metamodel fitness. In 
+\textcite{Lophaven2002}, the optimal set of hyperparameters $\theta^*$ 
+corresponds to the maximum likelihood estimation. Assuming a Gaussian process 
+\cite{Lophaven2002}, the optimal values of the hyperparameters solves 
+\autoref{eq:kr6}:
+
+\begin{equation}
+    \min _{\theta}\left\{\psi(\theta) \equiv|R|^{\frac{1}{m}} 
+    \sigma^{2}\right\}
+	\label{eq:kr6}
+\end{equation}
+
+Where $|R|$ is the determinant of the correlation matrix. The internal 
+optimizer used in \textit{DACE} corresponds to a modified version of 
+the \textit{Hooke \& Jeeves} method, as showed by \textcite{LophavenReport}.
+
+As stated before, high-order data obtainment it is an obligatory step in the 
+proposed methodology implemented in \mtc. Fortunately, \textcite{Lophaven2002} 
+also derived expressions for Jacobian evaluation of a \kriging prediction 
+(for full demonstration, consult \textcite{Lophaven2002}), given in 
+\autoref{eq:kr5}:
+
+\begin{equation}
+	\hat{y}^{\prime}(x)=J_{f}(x)^{T} \beta^{*}+J_{r}(x)^{T} \gamma^{*}
+	\label{eq:kr5}
+\end{equation}	
+
+The expression for Hessian evaluation was derived by \textcite{Alves2018} 
+(full demonstration in appendix A of their work), and it is depicted in 
+\autoref{eq:kr6}:
+
+\begin{equation}
+	\hat{y}^{\prime \prime}(x)=H_{f}(x) \beta^{*}+H_{r}(x) \gamma^{*}
+	\label{eq:kr6}
+\end{equation}
+
+\Cref{eq:kr5,,eq:kr6}, differently from numeric/automatic differentiation, 
+are not approximations and, instead, are analytical expressions
+derived by \textcite{Lophaven2002} and \textcite{Alves2018}. Therefore, it 
+is expected a reduced error when one is using these expressions, if compared 
+to techniques based in numerical approximation, considering that the \kriging 
+metamodel used is precise enough.
+
+For the design of experiments part, it was decided to implement the Latin 
+Hypercube Sampling (LHS) because it allows to better sample the optimization 
+domain without introducing ill-conditioning in the spatial correlation matrix 
+calculated by the \kriging builder.
+
+Lastly, both the LHS function and \kriging model builder/predictor were 
+implemented as a separated package in Python under the name of \textit{pydace} 
+(from \textit{Python toolbox for Design and Analysis of Experiments}). This 
+package is a partial code translation from the MATLAB® toolbox implemented by 
+\textcite{Lophaven2002} named \textit{DACE} to the Python programming 
+language. The link to the open-source code is 
+\url{https://github.com/feslima/pydace}. There the reader can find a brief 
+documentation on how to install and example of usage.
+
+\end{document}
