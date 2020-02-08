@@ -36,14 +36,18 @@
     ],
     "cSpell.words": [
         "Linearizing",
+        "hyperparameters",
         "linearization",
+        "metamodel",
+        "metamodeling",
         "metamodels",
         "nullspace",
         "plantwide",
         "reoptimize",
         "reoptimizing",
         "setpoint",
-        "setpoints"
+        "setpoints",
+        "unmodeled"
     ],
     "cSpell.language": "en,pt,pt_BR"
 }
