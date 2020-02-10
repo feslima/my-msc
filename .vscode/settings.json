@@ -35,6 +35,7 @@
         "yml"
     ],
     "cSpell.words": [
+        "Boilup",
         "Linearizing",
         "flowsheet",
         "hyperparameters",
@@ -45,6 +46,7 @@
         "metamodels",
         "nullspace",
         "plantwide",
+        "reboiler",
         "reoptimize",
         "reoptimizing",
         "setpoint",
