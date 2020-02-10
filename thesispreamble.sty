@@ -18,6 +18,8 @@
 \usepackage{xspace}
 \usepackage{ifthen}
 \usepackage[noabbrev, nameinlink]{cleveref}
+\usepackage{gensymb}			% degrees and celsius symbols
+\usepackage{siunitx}            % Round signifcant figures to desired precision
 
 % ------------------------------------------------------------------------------
 		
@@ -45,6 +47,11 @@
 % ------------------------------------------------------------------------------
 % Repositório de imagens
 \graphicspath{{images/}}
+% ------------------------------------------------------------------------------
+
+% ------------------------------------------------------------------------------
+% Precisão de arrendondamento dos números em tabelas (siunitx)
+\sisetup{round-mode=places,round-precision=4}
 % ------------------------------------------------------------------------------
 
 % ------------------------------------------------------------------------------
@@ -77,15 +84,37 @@
 \renewcommand{\nomname}{}
 
 % ------------------------------------------------------------------------------
-% cleveref
-\Crefformat{equation}{#2Equation~#1#3}
+% cleveref package
+
+% equations
+\Crefformat{equation}{#2\equationautorefname~#1#3}
 \Crefmultiformat{equation}%
-   {#2Equations~#1#3}% % first item in list
+   {#2\equationautorefname{s}~#1#3}% % first item in list
    { and~#2#1#3}% % second (if exactly two items)
    {, #2#1#3}%     % middle (if more than two items)
    { and~#2#1#3}  % last   (if more than two items)
 \Crefrangeformat{equation}%
-   {#3Equations~#1#4 to~#5#2#6}
+   {#3\equationautorefname{s}~#1#4 to~#5#2#6}
+
+% figures
+\Crefformat{figure}{#2\figureautorefname~#1#3}
+\Crefmultiformat{figure}%
+	{#2\figureautorefname{s}~#1#3}% % first item in list
+	{ and~#2#1#3}% % second (if exactly two items)
+	{, #2#1#3}%     % middle (if more than two items)
+	{ and~#2#1#3}  % last   (if more than two items)
+\Crefrangeformat{figure}%
+	{#3\figureautorefname{s}~#1#4 to~#5#2#6}
+
+% tables
+\Crefformat{table}{#2\tableautorefname~#1#3}
+\Crefmultiformat{table}%
+	{#2\tableautorefname{s}~#1#3}% % first item in list
+	{ and~#2#1#3}% % second (if exactly two items)
+	{, #2#1#3}%     % middle (if more than two items)
+	{ and~#2#1#3}  % last   (if more than two items)
+\Crefrangeformat{table}%
+	{#3\tableautorefname{s}~#1#4 to~#5#2#6}
 
 % ------------------------------------------------------------------------------
 % Informações de dados para CAPA e FOLHA DE ROSTO
@@ -199,4 +228,5 @@ obtenção do grau de Mestre. Área de concentração: Engenharia Química.}
 \newcommand{\mtc}{\textit{Metacontrol}\xspace}
 \newcommand{\kriging}{\textit{Kriging}\xspace}
 \newcommand{\soc}{Self-Optimizing Control\xspace}
-% \newcommand{}{}
+\newcommand{\co}{CO\textsubscript{2}\xspace}
+\newcommand{\autfont}{\fonte{Author.}}
