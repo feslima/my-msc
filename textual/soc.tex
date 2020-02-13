@@ -58,6 +58,7 @@ system, respectively.
 \nomenclature[B]{$x$}{Process states}
 \nomenclature[B]{$d$}{Process disturbances}
 \nomenclature[B]{$J$}{Process objective function}
+\nomenclature[B]{$J_{0}$}{Process objective function in unrestricted space}
 
 Regarding the disturbances, these can be: change in feed conditions, prices 
 of the products and raw materials, specifications (constraints) and/or changes 
@@ -86,7 +87,7 @@ is possible to search for a \soc structure basically using two methods:
 
 \begin{enumerate}
     \item Manually testing each CV candidate, reoptimizing the process for 
-	different disturbances' scenarios, and choosing the strucutre that yields 
+	different disturbances' scenarios, and choosing the structure that yields 
 	the lowest (worst-case or average-case) loss; \label{soc:method1}
 
 	\item Using local methods based on second-order Taylor series expansion of 
@@ -276,7 +277,7 @@ Assuming that $\tilde{F} \tilde{F}^{T}$ is full rank.
 	
 	\item The solution for H was proved to minimize not only the worst-case, but 
 	also the average-case loss. Therefore, if one uses \autoref{eq:Hexact} 
-	seeking the determination of a control strucutre that minimizes the loss at 
+	seeking the determination of a control structure that minimizes the loss at 
 	the worst-case scenario, he is also minimizing the loss for the average-case 
 	scenario. This was called as a ``super-optimality'' by \textcite{Alstad2009}.
 

@@ -52,6 +52,8 @@
         "reoptimizing",
         "setpoint",
         "setpoints",
+        "surrogados",
+        "unconverged",
         "unmodeled"
     ],
     "cSpell.language": "en,pt,pt_BR"
